@@ -70,35 +70,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendResponseToSheet = async (response) => {
         console.log(`Sending response: ${response}`);
         const scriptURL = 'https://script.google.com/macros/s/AKfycbz7jrDuk4S01Yx1hbj059ysDKW8ovaeZ9ARScxlyCOD4AII_kVQUOf5kooZcRW2Ln3XFQ/exec'; 
-        const formData = new FormData();
-        formData.append('response', response);
-        formData.append('timestamp', new Date().toISOString());
-
+        
         try {
-            // alert('Sending response... This might take a moment.'); // Optional user feedback
-
-            // Uncomment and use this fetch call after setting up Google Apps Script
             const fetchResponse = await fetch(scriptURL, {
-                method: 'POST', 
-                // mode: 'no-cors', // REMOVE THIS - It prevents reading the response
-                body: formData
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `response=${encodeURIComponent(response)}&timestamp=${encodeURIComponent(new Date().toISOString())}`
             });
             
-            // Check if the request was successful (status code 200-299)
             if (fetchResponse.ok) {
-                console.log('Success!', await fetchResponse.json()); // Log the success JSON from Apps Script
-                alert('ありがとう！'); // Thank you!
+                const result = await fetchResponse.json();
+                console.log('Success!', result);
+                alert('ありがとう！');
             } else {
                 console.error('Fetch Error!', fetchResponse.status, fetchResponse.statusText);
-                alert('送信中にエラーが発生しました。後でもう一度お試しください。'); // Error during transmission
+                alert('送信中にエラーが発生しました。後でもう一度お試しください。');
             }
-           
-           // Placeholder alert for demonstration: REMOVE THIS
-           // alert(`Response "${response}" recorded (placeholder). Please configure Google Sheets API.`);
-
         } catch (error) {
             console.error('Error!', error.message);
-            alert('エラーが発生しました。もう一度お試しください。'); // An error occurred. Please try again.
+            alert('エラーが発生しました。もう一度お試しください。');
         }
     };
 
