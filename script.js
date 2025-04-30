@@ -102,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1000);
 
             console.log('Request sent successfully');
-            alert('ありがとう！');
         } catch (error) {
             console.error('Error!', error.message);
             alert('エラーが発生しました。もう一度お試しください。');
