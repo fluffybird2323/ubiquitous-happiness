@@ -69,19 +69,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Google Sheets API Integration Placeholder --- 
     const sendResponseToSheet = async (response) => {
         console.log(`Sending response: ${response}`);
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz7jrDuk4S01Yx1hbj059ysDKW8ovaeZ9ARScxlyCOD4AII_kVQUOf5kooZcRW2Ln3XFQ/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxwg1thcKd7bQYNsloTHiCuKku1ihutYgrgIPhEWnnnJYXKsl3qfbE1GhFjw9Paou11Fg/exec';
         
         try {
-            const url = `${scriptURL}?response=${encodeURIComponent(response)}&timestamp=${encodeURIComponent(new Date().toISOString())}`;
-            console.log('Sending request to:', url);
+            // Create a form element
+            const form = document.createElement('form');
+            form.method = 'GET';
+            form.action = scriptURL;
+            form.target = 'responseFrame'; // Target the iframe
+
+            // Add response parameter
+            const responseInput = document.createElement('input');
+            responseInput.type = 'hidden';
+            responseInput.name = 'response';
+            responseInput.value = response;
+            form.appendChild(responseInput);
+
+            // Add timestamp parameter
+            const timestampInput = document.createElement('input');
+            timestampInput.type = 'hidden';
+            timestampInput.name = 'timestamp';
+            timestampInput.value = new Date().toISOString();
+            form.appendChild(timestampInput);
+
+            // Add form to document and submit
+            document.body.appendChild(form);
+            form.submit();
             
-            const fetchResponse = await fetch(url, {
-                method: 'GET',
-                mode: 'no-cors' // We don't need to read the response
-            });
-            
-            // Even though we can't read the response due to no-cors,
-            // the request should still go through
+            // Remove form after submission
+            setTimeout(() => {
+                document.body.removeChild(form);
+            }, 1000);
+
             console.log('Request sent successfully');
             alert('ありがとう！');
         } catch (error) {

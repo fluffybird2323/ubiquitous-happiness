@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ありがとう！</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #fff0f5;
+            font-family: 'Noto Serif JP', serif;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            width: 400px;
+        }
+        h1 {
+            color: #ff4d6d;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #5a4242;
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+        .heart {
+            font-size: 3em;
+            margin: 20px 0;
+            animation: heartbeat 1.5s infinite;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="heart">❤️</div>
+        <h1>ありがとう！</h1>
+        <p>あなたの返事を受け取りました。</p>
+        <p>このページは自動的に閉じます。</p>
+    </div>
+    <script>
+        setTimeout(() => {
+            window.close();
+        }, 3000);
+    </script>
+</body>
+</html> 
