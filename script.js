@@ -69,29 +69,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Google Sheets API Integration Placeholder --- 
     const sendResponseToSheet = async (response) => {
         console.log(`Sending response: ${response}`);
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz7jrDuk4S01Yx1hbj059ysDKW8ovaeZ9ARScxlyCOD4AII_kVQUOf5kooZcRW2Ln3XFQ/exec'; 
         
-        try {
-            const fetchResponse = await fetch(scriptURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `response=${encodeURIComponent(response)}&timestamp=${encodeURIComponent(new Date().toISOString())}`
-            });
+        return new Promise((resolve, reject) => {
+            // Create an iframe to load the proxy
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
             
-            if (fetchResponse.ok) {
-                const result = await fetchResponse.json();
-                console.log('Success!', result);
-                alert('ありがとう！');
-            } else {
-                console.error('Fetch Error!', fetchResponse.status, fetchResponse.statusText);
-                alert('送信中にエラーが発生しました。後でもう一度お試しください。');
-            }
-        } catch (error) {
-            console.error('Error!', error.message);
-            alert('エラーが発生しました。もう一度お試しください。');
-        }
+            // Listen for the response from the proxy
+            const messageHandler = (event) => {
+                if (event.data.error) {
+                    console.error('Error!', event.data.error);
+                    alert('エラーが発生しました。もう一度お試しください。');
+                    reject(event.data.error);
+                } else {
+                    console.log('Success!', event.data);
+                    alert('ありがとう！');
+                    resolve(event.data);
+                }
+                // Clean up
+                window.removeEventListener('message', messageHandler);
+                document.body.removeChild(iframe);
+            };
+            
+            window.addEventListener('message', messageHandler);
+            
+            // Load the proxy with the response data
+            iframe.src = `proxy.html?response=${encodeURIComponent(response)}&timestamp=${encodeURIComponent(new Date().toISOString())}`;
+        });
     };
 
     yesButton.addEventListener('click', async () => { // Make async
