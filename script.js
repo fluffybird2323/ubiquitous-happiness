@@ -72,14 +72,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const scriptURL = 'https://script.google.com/macros/s/AKfycbz7jrDuk4S01Yx1hbj059ysDKW8ovaeZ9ARScxlyCOD4AII_kVQUOf5kooZcRW2Ln3XFQ/exec';
         
         try {
-            const fetchResponse = await fetch(`${scriptURL}?response=${encodeURIComponent(response)}&timestamp=${encodeURIComponent(new Date().toISOString())}`, {
+            const url = `${scriptURL}?response=${encodeURIComponent(response)}&timestamp=${encodeURIComponent(new Date().toISOString())}`;
+            console.log('Sending request to:', url);
+            
+            const fetchResponse = await fetch(url, {
                 method: 'GET',
-                mode: 'no-cors' // Since we don't need to read the response
+                mode: 'no-cors' // We don't need to read the response
             });
             
-            // Since we're using no-cors, we can't read the response
-            // But the request should still go through
-            console.log('Request sent');
+            // Even though we can't read the response due to no-cors,
+            // the request should still go through
+            console.log('Request sent successfully');
             alert('ありがとう！');
         } catch (error) {
             console.error('Error!', error.message);
