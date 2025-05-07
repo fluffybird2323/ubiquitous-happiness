@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Google Sheets API Integration Placeholder --- 
     const sendResponseToSheet = async (response) => {
         console.log(`Sending response: ${response}`);
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbx9kWjaWT_ae8qXgEUky2T545aR5oAraadDzMLOYxtLU-yc3jEdKoHZ6YLTZc64uFjVpA/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxOSdIAFnAH4Irepd40PtTpqOPHe_abu_SiLlv3U41MVpwRtJjtLaZH3mdaJza7cBBA/exec';
 
         try {
             // Create a form element
