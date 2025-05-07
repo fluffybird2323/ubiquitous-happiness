@@ -66,64 +66,48 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     // --- End Heart Animation ---
 
-    // --- Google Sheets API Integration Placeholder --- 
-    const sendResponseToSheet = async (response) => {
-        console.log(`Sending response: ${response}`);
+    // --- Google Sheets API Integration Placeholder ---
+    const sendResponseToSheet = async (responseValue) => {
+        console.log(`Sending response: ${responseValue}`);
         const scriptURL = 'https://script.google.com/macros/s/AKfycbzA1XPo_Fi9wGPoGyoi77s1BQ1XimrJFWHahixhhDOp3co8p8lCFIFYnG34UEoyhNTB9Q/exec';
+        const params = new URLSearchParams();
+        params.append('response', responseValue);
+        params.append('timestamp', new Date().toISOString());
 
         try {
-            // Create a form element
-            const form = document.createElement('form');
-            form.method = 'GET';
-            form.action = scriptURL;
-            form.target = 'responseFrame'; // Target the iframe
-
-            // Add response parameter
-            const responseInput = document.createElement('input');
-            responseInput.type = 'hidden';
-            responseInput.name = 'response';
-            responseInput.value = response;
-            form.appendChild(responseInput);
-
-            // Add timestamp parameter
-            const timestampInput = document.createElement('input');
-            timestampInput.type = 'hidden';
-            timestampInput.name = 'timestamp';
-            timestampInput.value = new Date().toISOString();
-            form.appendChild(timestampInput);
-
-            // Add form to document and submit
-            document.body.appendChild(form);
-            form.submit();
-            
-            // Remove form after submission
-            setTimeout(() => {
-                document.body.removeChild(form);
-            }, 1000);
-
-            console.log('Request sent successfully');
+            // Use fetch to send data to Google Apps Script
+            // 'no-cors' mode allows sending the request even if the script doesn't set CORS headers,
+            // but we won't be able to read the response from the script. This is often fine for logging.
+            await fetch(`${scriptURL}?${params.toString()}`, {
+                method: 'GET', // Or 'POST' if your Apps Script expects POST for form data
+                mode: 'no-cors'
+            });
+            console.log('Response sent to Google Sheet (assumed success due to no-cors).');
         } catch (error) {
-            console.error('Error!', error.message);
-            alert('エラーが発生しました。もう一度お試しください。');
+            console.error('Error sending response to Google Sheet:', error.message);
+            // Optionally, alert the user if the submission fails critically
+            // alert('データの送信中にエラーが発生しました。');
         }
     };
 
-    yesButton.addEventListener('click', async () => { // Make async
+    yesButton.addEventListener('click', async () => {
         yesButton.disabled = true;
         noButton.disabled = true;
-        playHeartsAnimation(); // Play effect first
+        playHeartsAnimation();
         // Optional: Wait a moment for the animation to be visible
-        await new Promise(resolve => setTimeout(resolve, 500)); 
-        await sendResponseToSheet('はい！'); // Wait for response sending
+        await new Promise(resolve => setTimeout(resolve, 500));
+        await sendResponseToSheet('はい！'); // Send data
+        // Navigate to response.html with the parameter
+        window.location.href = `response.html?response=${encodeURIComponent('はい！')}`;
     });
 
-    noButton.addEventListener('click', async () => { // Make async
+    noButton.addEventListener('click', async () => {
         yesButton.disabled = true;
         noButton.disabled = true;
-        await sendResponseToSheet('いいえ'); // Wait for response sending
-        // Attempt to close the window - may be blocked by browser
-        window.close();
-        // Fallback message if close fails
-        alert("ウィンドウを閉じてください。"); // Please close the window.
+        await sendResponseToSheet('いいえ'); // Send data
+        // Navigate to response.html with the parameter
+        window.location.href = `response.html?response=${encodeURIComponent('いいえ')}`;
+        // The response.html page will attempt to close itself.
+        // If it fails, the "いいえ" message on response.html will be shown.
     });
 }); 
