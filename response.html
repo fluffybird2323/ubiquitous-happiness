@@ -73,12 +73,12 @@
         </div>
     </div>
     <script>
-        // Get response from URL parameters
+        // Get response from URL parameters and decode it
         const urlParams = new URLSearchParams(window.location.search);
-        const response = urlParams.get('response');
+        const response = decodeURIComponent(urlParams.get('response'));
         
         // Show appropriate content based on response
-        if (response && response.includes('はい')) {
+        if (response === 'はい！') {
             document.getElementById('yes-content').style.display = 'block';
         } else {
             document.getElementById('no-content').style.display = 'block';
