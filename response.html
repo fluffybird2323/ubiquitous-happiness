@@ -78,7 +78,7 @@
         const response = urlParams.get('response');
         
         // Show appropriate content based on response
-        if (response === 'はい！') {
+        if (response && response.includes('はい')) {
             document.getElementById('yes-content').style.display = 'block';
         } else {
             document.getElementById('no-content').style.display = 'block';
