@@ -34,17 +34,23 @@
             font-size: 1.2em;
             line-height: 1.6;
         }
-        .heart {
+        .emoji {
             font-size: 3em;
             margin: 20px 0;
-            animation: heartbeat 1.5s infinite;
+            animation: pulse 1.5s infinite;
         }
-        @keyframes heartbeat {
+        @keyframes pulse {
             0% { transform: scale(1); }
             25% { transform: scale(1.1); }
             50% { transform: scale(1); }
             75% { transform: scale(1.1); }
             100% { transform: scale(1); }
+        }
+        .yes-response {
+            display: none;
+        }
+        .no-response {
+            display: none;
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,12 +59,31 @@
 </head>
 <body>
     <div class="container">
-        <div class="heart">❤️</div>
-        <h1>ありがとう！</h1>
-        <p>あなたの返事を受け取りました。</p>
-        <p>このページは自動的に閉じます。</p>
+        <div id="yes-content" class="yes-response">
+            <div class="emoji">❤️</div>
+            <h1>ありがとう！</h1>
+            <p>あなたの返事を受け取りました。</p>
+            <p>これからよろしくお願いします。</p>
+        </div>
+        <div id="no-content" class="no-response">
+            <div class="emoji">🌙</div>
+            <h1>ありがとう</h1>
+            <p>あなたの返事を受け取りました。</p>
+            <p>お互い頑張りましょう。</p>
+        </div>
     </div>
     <script>
+        // Get response from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const response = urlParams.get('response');
+        
+        // Show appropriate content based on response
+        if (response === 'はい！') {
+            document.getElementById('yes-content').style.display = 'block';
+        } else {
+            document.getElementById('no-content').style.display = 'block';
+        }
+
         setTimeout(() => {
             window.close();
         }, 3000);
